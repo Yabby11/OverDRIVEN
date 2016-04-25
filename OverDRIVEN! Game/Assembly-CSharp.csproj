@@ -180,7 +180,10 @@
      <Compile Include="Assets\Asset Packages\Standard Assets\Vehicles\Car\Scripts\SkidTrail.cs" />
      <Compile Include="Assets\Asset Packages\Standard Assets\Vehicles\Car\Scripts\Suspension.cs" />
      <Compile Include="Assets\Asset Packages\Standard Assets\Vehicles\Car\Scripts\WheelEffects.cs" />
+     <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\MenuController.cs" />
+     <Compile Include="Assets\Scripts\RobotMovement.cs" />
+     <Compile Include="Assets\Scripts\UI.cs" />
      <Compile Include="Assets\Singleton\SingletonBehaviour.cs" />
      <None Include="Assets\Asset Packages\Standard Assets\Effects\GlassRefraction\Shaders\GlassStainedBumpDistort.shader" />
      <None Include="Assets\Asset Packages\Standard Assets\Effects\ImageEffects\Shaders\_BloomAndFlares\BlendOneOne.shader" />
