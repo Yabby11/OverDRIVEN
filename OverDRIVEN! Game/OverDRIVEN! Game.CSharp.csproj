@@ -206,7 +206,7 @@
     <Compile Include="Assets\Asset Packages\Standard Assets\Vehicles\Car\Scripts\WheelEffects.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\MenuController.cs" />
-    <Compile Include="Assets\Scripts\RobotMovement.cs" />
+    <Compile Include="Assets\Scripts\RobotController..cs" />
     <Compile Include="Assets\Scripts\SingletonBehaviour.cs" />
     <Compile Include="Assets\Scripts\UI.cs" />
   </ItemGroup>
