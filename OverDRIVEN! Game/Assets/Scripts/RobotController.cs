@@ -49,32 +49,10 @@ public class RobotController : MonoBehaviour {
                 //If the countdown reaches 0,
                 if(selectionTime <= 0.0f) {
                     //What car did you laser down? Set it to the selected car.
-                    switch(hit.transform.name) {
-                        case "Base AI":
-                            GameManager.Instance.baseAiVehicle = true;
-                            break;
-                        case "Armoured":
-                            GameManager.Instance.armouredVehicle = true;
-                            break;
-                        case "Supra":
-                            GameManager.Instance.supraVehicle = true;
-                            break;
-                        case "WRX":
-                            GameManager.Instance.wrxVehicle = true;
-                            break;
-                        case "Chevelle":
-                            GameManager.Instance.chevelleVehicle = true;
-                            break;
-                        case "GTR":
-                            GameManager.Instance.gtrVehicle = true;
-                            break;
-                        case "Stingray":
-                            GameManager.Instance.stingrayVehicle = true;
-                            break;
-                    }
+                    GameManager.Instance.carSelected = hit.transform.name;
                     Debug.Log("Selected: " + hit.transform.name);
-                    GameManager.Instance.gameCanBegin = true;
 
+                    GameManager.Instance.gameCanBegin = true;
                     SceneManager.LoadScene(2);
                 }
             } else {

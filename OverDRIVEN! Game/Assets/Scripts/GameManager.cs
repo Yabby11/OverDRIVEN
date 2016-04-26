@@ -1,16 +1,21 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class GameManager : SingletonBehaviour<GameManager> {
 
+    public Mesh baseAI,
+                armoured,
+                supra,
+                wrx,
+                chevelle,
+                gtr,
+                stingray;
+
+    public GameObject Car;
+
     //Cars to choose from.
-    public bool baseAiVehicle, 
-                armouredVehicle,  
-                supraVehicle,
-                wrxVehicle,
-                chevelleVehicle,
-                gtrVehicle,
-                stingrayVehicle;
+    public string carSelected;
 
     //Car is selected, game can now begin
     /*@*@*@* Add when you crash, set to false *@*@*@*/
@@ -19,6 +24,8 @@ public class GameManager : SingletonBehaviour<GameManager> {
     //Game is over, go back to car selection screen.
     /*@*@*@* Add when you crash, set to true *@*@*@*/
     public bool gameRestarted;
+
+    public bool carActivated;
 
     //The hacker timer.
     public float timer;
@@ -44,8 +51,12 @@ public class GameManager : SingletonBehaviour<GameManager> {
     }
 
     void Update() {
-        if(gameCanBegin) {
+        if(gameCanBegin && SceneManager.GetActiveScene().name == "OverDRIVEN Game Scene") {
             timer += Time.deltaTime;
+
+            if(!carActivated) {
+                ActivateCar();
+            }
 
             //If the counter is at a 30 second mark,
             if(timer % 30 <= 0.02f && timer > 1f) {
@@ -61,13 +72,45 @@ public class GameManager : SingletonBehaviour<GameManager> {
         }
     }
 
+    void ActivateCar() {
+        Car = Instantiate(Car);
+
+        switch(carSelected) {
+            case "Base AI":
+                Car.GetComponent<MeshFilter>().mesh = baseAI;
+                break;
+            case "Armoured":
+                Car.GetComponent<MeshFilter>().mesh = armoured;
+                break;
+            case "Supra":
+                Car.GetComponent<MeshFilter>().mesh = supra;
+                break;
+            case "WRX":
+                Car.GetComponent<MeshFilter>().mesh = wrx;
+                break;
+            case "Chevelle":
+                Car.GetComponent<MeshFilter>().mesh = chevelle;
+                break;
+            case "GTR":
+                Car.GetComponent<MeshFilter>().mesh = gtr;
+                break;
+            case "Stingray":
+                Car.GetComponent<MeshFilter>().mesh = stingray;
+                break;
+        }
+
+        carActivated = true;
+    }
+
+    void DeactivateCar() {
+        GameObject.Find(carSelected).SetActive(false);
+    }
+
     //If the game has asked to be restarted,
     void ResetChosenCar() {
         //Delete the current car from being chosen, so you can re-choose.
-        baseAiVehicle = armouredVehicle =
-        supraVehicle = wrxVehicle =
-        chevelleVehicle = gtrVehicle = 
-        stingrayVehicle = false;
+        carSelected = "";
+        carActivated = false;
     }
 
     //When reassigning controls,
