@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
-public class RobotMovement : MonoBehaviour {
+public class RobotController : MonoBehaviour {
 
     //Get the transform of the robot.
     public Transform robot;
@@ -65,6 +66,8 @@ public class RobotMovement : MonoBehaviour {
                     }
                     Debug.Log("Selected: " + hit.transform.name);
                     GameManager.Instance.gameCanBegin = true;
+
+                    SceneManager.LoadScene(2);
                 }
             } else {
                 //If you moved your laser before the time was up, reset the countdown time.

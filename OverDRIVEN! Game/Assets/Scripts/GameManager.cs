@@ -39,6 +39,8 @@ public class GameManager : SingletonBehaviour<GameManager> {
         backwardC = "s";
         leftC = "a";
         rightC = "d";
+
+        Object.DontDestroyOnLoad(this.gameObject);
     }
 
     void Update() {
