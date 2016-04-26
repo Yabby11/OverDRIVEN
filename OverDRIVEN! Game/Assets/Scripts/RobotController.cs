@@ -13,6 +13,9 @@ public class RobotController : MonoBehaviour {
     //Set up the Raycast.
     RaycastHit hit;
 
+    //The laser reference
+    public LineRenderer laser;
+
     //How long the laser has been on the car, after 5 seconds, signifying that they want to choose that one.
     public float selectionTime = 5.0f;
 
@@ -29,11 +32,16 @@ public class RobotController : MonoBehaviour {
         robot.Rotate(new Vector3(0, Input.GetAxis("Mouse X"), 0) * Time.deltaTime * speed * 2);
 
         //Laser.
+        if(Input.GetMouseButton(0)) {
+            laser.enabled = true;
+        } else {
+            laser.enabled = false;
+        }
         CastRay();        
     }
 
     void CastRay() {
-        if(Physics.Raycast(robot.position, -transform.right, out hit, 500.0f)) {
+        if(Physics.Raycast(robot.position, -transform.right, out hit, 5.0f) && laser.enabled) {
             //If the Raycast hits a car,
             if(hit.transform.tag == "Car") {
                 //Start counting down to 0 form 5.
@@ -42,7 +50,7 @@ public class RobotController : MonoBehaviour {
                 if(selectionTime <= 0.0f) {
                     //What car did you laser down? Set it to the selected car.
                     switch(hit.transform.name) {
-                        case "Base AI" :
+                        case "Base AI":
                             GameManager.Instance.baseAiVehicle = true;
                             break;
                         case "Armoured":
@@ -76,6 +84,8 @@ public class RobotController : MonoBehaviour {
 
             //So in the Editor, we can see the Raycast hitting the cars.
             Debug.DrawLine(robot.position, hit.point, Color.red);
+        } else {
+            selectionTime = 5.0f;
         }
     }
 
