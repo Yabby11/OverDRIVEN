@@ -59,7 +59,7 @@ public class GameManager : SingletonBehaviour<GameManager> {
             }
 
             //If the counter is at a 30 second mark,
-            if(timer % 30 <= 0.02f && timer > 1f) {
+            if(timer % 60 <= 0.02f && timer > 1f) {
                 //Change the controls.
                 HackerControls();
             }
