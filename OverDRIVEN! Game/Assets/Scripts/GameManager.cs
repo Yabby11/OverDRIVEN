@@ -30,6 +30,11 @@ public class GameManager : SingletonBehaviour<GameManager> {
     //The hacker timer.
     public float timer;
 
+    //Car bools
+    public GameObject aiActive;
+    public GameObject chevelleActive;
+    public GameObject supraActive;
+
     //The 4 directions you can move in.
     public string forwardC,
                   backwardC,
@@ -73,11 +78,9 @@ public class GameManager : SingletonBehaviour<GameManager> {
     }
 
     void ActivateCar() {
-        Car = Instantiate(Car);
-
         switch(carSelected) {
             case "Base AI":
-                Car.GetComponent<MeshFilter>().mesh = baseAI;
+                Car.transform.GetChild(0).gameObject.SetActive(true);
                 break;
             case "Armoured":
                 Car.GetComponent<MeshFilter>().mesh = armoured;
@@ -98,7 +101,7 @@ public class GameManager : SingletonBehaviour<GameManager> {
                 Car.GetComponent<MeshFilter>().mesh = stingray;
                 break;
         }
-
+        Debug.Log("Again");
         carActivated = true;
     }
 

@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        car.position += transform.forward * moveSpeed * Time.deltaTime;
+        car.position += -transform.right * moveSpeed * Time.deltaTime;
         //Movement Up and Down
         if(Input.GetKey(GameManager.Instance.forwardC) && Input.GetKey(GameManager.Instance.backwardC)) {
             if(moveSpeed > 0.05f) {
@@ -44,10 +44,10 @@ public class PlayerController : MonoBehaviour {
                 }
             }
 
-        } else if(moveSpeed > 0.05f) {
+        } else if(moveSpeed > 0.0f) {
             moveSpeed -= Time.deltaTime * 2;
 
-        } else if (moveSpeed < 0.05f) {
+        } else if (moveSpeed < 0.0f) {
             moveSpeed += Time.deltaTime * 2;
         }
 
