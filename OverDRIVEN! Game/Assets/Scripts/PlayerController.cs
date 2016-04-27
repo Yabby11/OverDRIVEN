@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour {
 
     Transform car;
     public float moveSpeed = 0.0f;
-    public float maxMoveSpeed = 6.66f;
+    public float maxSpeed = 6.66f;
     public float rotateSpeed = 100.0f;
 
     public GameObject baseAI,
@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        car.position += -transform.right * moveSpeed * Time.deltaTime;
+        car.position += transform.forward * moveSpeed * Time.deltaTime;
         //Movement Up and Down
         if(Input.GetKey(GameManager.Instance.forwardC) && Input.GetKey(GameManager.Instance.backwardC)) {
             if(moveSpeed > 0.05f) {
@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour {
             }
 
         } else if(Input.GetKey(GameManager.Instance.forwardC)) {
-            if(moveSpeed < maxMoveSpeed) {
+            if(moveSpeed < maxSpeed) {
                 if(moveSpeed < 0.0f) {
                     moveSpeed += Time.deltaTime * 3;
                 } else {
@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour {
             }
 
         } else if(Input.GetKey(GameManager.Instance.backwardC)) {
-            if(moveSpeed > -maxMoveSpeed) {
+            if(moveSpeed > -maxSpeed) {
                 if(moveSpeed > 0.0f) {
                     moveSpeed -= Time.deltaTime * 3;
                 } else {
@@ -70,12 +70,13 @@ public class PlayerController : MonoBehaviour {
             car.Rotate(new Vector3(0, 1, 0) * Time.deltaTime * moveSpeed * 15);
         }
 
+        this.gameObject.GetComponent<Rigidbody>().velocity = transform.forward * moveSpeed / 2;
 
         //TEST
-        if(GameManager.Instance.timer > 10.0f && !doneReset) {
+        /*if(GameManager.Instance.timer > 10.0f && !doneReset) {
             DeactivateCar();
             doneReset = true;
-        }
+        }*/
     }
 
     void ActivateCar() {
