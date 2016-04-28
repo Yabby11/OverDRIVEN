@@ -31,12 +31,9 @@ public class GameManager : SingletonBehaviour<GameManager> {
     public string[] arrayOfKeys = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
 
 
-    void Start () {        
+    void Start () {
         //Initial set controls to WASD.
-        forwardC = "w";
-        backwardC = "s";
-        leftC = "a";
-        rightC = "d";
+        ResetControls();
 
         Object.DontDestroyOnLoad(this.gameObject);
     }
@@ -46,7 +43,7 @@ public class GameManager : SingletonBehaviour<GameManager> {
             timer += Time.deltaTime;
 
             //If the counter is at a 30 second mark,
-            if(timer % 60 <= 0.02f && timer > 1f) {
+            if(timer % 30 <= 0.02f && timer > 1f) {
                 //Change the controls.
                 HackerControls();
             }
@@ -82,7 +79,15 @@ public class GameManager : SingletonBehaviour<GameManager> {
         }
     }
 
+    void ResetControls() {
+        forwardC = "w";
+        backwardC = "s";
+        leftC = "a";
+        rightC = "d";
+    }
+
     void RestartGame() {
+        ResetControls();
         carSelected = "";
         dead = false;
         SceneManager.LoadScene(1);
