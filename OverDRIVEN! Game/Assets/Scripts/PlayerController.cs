@@ -158,8 +158,10 @@ public class PlayerController : MonoBehaviour {
         GameManager.Instance.gameRestarted = true;
     }
 
-    void OnCollisionEnter(Collision other) {
-        if (other.gameObject.tag == "Buildings" && (moveSpeed >= maxSpeed / 2 || moveSpeed <= -maxSpeed / 2 )) {
+    void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.tag == "Buildings" && (moveSpeed >= maxSpeed / 2 || moveSpeed <= -maxSpeed / 2))
+        {
             GameManager.Instance.dead = true;
             Instantiate(carExplotion, car.transform.position, car.transform.rotation);
             StartCoroutine(WaitForExplosion());
