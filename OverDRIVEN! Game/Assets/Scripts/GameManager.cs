@@ -18,6 +18,9 @@ public class GameManager : SingletonBehaviour<GameManager> {
     //Cars to choose from.
     public string carSelected;
 
+    //make dead
+    public bool dead;
+
     //The 4 directions you can move in.
     public string forwardC,
                   backwardC,
@@ -47,6 +50,11 @@ public class GameManager : SingletonBehaviour<GameManager> {
                 //Change the controls.
                 HackerControls();
             }
+
+            if(gameRestarted)
+            {
+                RestartGame();
+            }
         }
     }
     
@@ -72,5 +80,12 @@ public class GameManager : SingletonBehaviour<GameManager> {
             rightC = arrayOfKeys[GetRandResult()];
             Debug.Log("Forward: " + forwardC + ", Backward: " + backwardC + ", Left: " + leftC + ", Right: " + rightC);
         }
+    }
+
+    void RestartGame() {
+        carSelected = "";
+        dead = false;
+        SceneManager.LoadScene(1);
+
     }
 }

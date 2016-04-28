@@ -9,6 +9,9 @@ public class PlayerController : MonoBehaviour {
     public float maxSpeed = 6.66f;
     public float rotateSpeed = 100.0f;
 
+    Vector3 startingPos;
+    public GameObject carExplotion;
+
     public GameObject baseAI,
             armoured,
             supra,
@@ -22,61 +25,97 @@ public class PlayerController : MonoBehaviour {
     // Use this for initialization
     void Start () {
         car = this.transform;
+        startingPos = car.position;
         //I hope Start() runs again once the scene has been loaded for a second time.
         ActivateCar();
     }
 
     // Update is called once per frame
     void Update() {
-        car.position += transform.forward * moveSpeed * Time.deltaTime;
-        //Movement Up and Down
-        if(Input.GetKey(GameManager.Instance.forwardC) && Input.GetKey(GameManager.Instance.backwardC)) {
-            if(moveSpeed > 0.05f) {
-                moveSpeed -= Time.deltaTime * 3;
-            } else if(moveSpeed < 0.05f) {
-                moveSpeed += Time.deltaTime * 3;
-            } else if(moveSpeed > -0.05f && moveSpeed < 0.05f) {
-                //MASSIVE SKIDDIES
-            }
 
-        } else if(Input.GetKey(GameManager.Instance.forwardC)) {
-            if(moveSpeed < maxSpeed) {
-                if(moveSpeed < 0.0f) {
-                    moveSpeed += Time.deltaTime * 3;
-                } else {
-                    moveSpeed += Time.deltaTime;
-                }
-            }
+        Movement();
 
-        } else if(Input.GetKey(GameManager.Instance.backwardC)) {
-            if(moveSpeed > -maxSpeed) {
-                if(moveSpeed > 0.0f) {
+
+    }
+
+    void Movement() {
+
+        if (!GameManager.Instance.dead)
+            
+        {
+            car.position += transform.forward * moveSpeed * Time.deltaTime;
+            //Movement Up and Down
+            if (Input.GetKey(GameManager.Instance.forwardC) && Input.GetKey(GameManager.Instance.backwardC))
+            {
+                if (moveSpeed > 0.05f)
+                {
                     moveSpeed -= Time.deltaTime * 3;
-                } else {
-                    moveSpeed -= Time.deltaTime;
                 }
+                else if (moveSpeed < 0.05f)
+                {
+                    moveSpeed += Time.deltaTime * 3;
+                }
+                else if (moveSpeed > -0.05f && moveSpeed < 0.05f)
+                {
+                    //MASSIVE SKIDDIES
+                }
+
+            }
+            else if (Input.GetKey(GameManager.Instance.forwardC))
+            {
+                if (moveSpeed < maxSpeed)
+                {
+                    if (moveSpeed < 0.0f)
+                    {
+                        moveSpeed += Time.deltaTime * 3;
+                    }
+                    else {
+                        moveSpeed += Time.deltaTime;
+                    }
+                }
+
+            }
+            else if (Input.GetKey(GameManager.Instance.backwardC))
+            {
+                if (moveSpeed > -maxSpeed)
+                {
+                    if (moveSpeed > 0.0f)
+                    {
+                        moveSpeed -= Time.deltaTime * 3;
+                    }
+                    else {
+                        moveSpeed -= Time.deltaTime;
+                    }
+                }
+
+            }
+            else if (moveSpeed > 0.0f)
+            {
+                moveSpeed -= Time.deltaTime * 2;
+
+            }
+            else if (moveSpeed < 0.0f)
+            {
+                moveSpeed += Time.deltaTime * 2;
             }
 
-        } else if(moveSpeed > 0.0f) {
-            moveSpeed -= Time.deltaTime * 2;
+            if (Input.GetKey(GameManager.Instance.leftC))
+            {
+                car.Rotate(new Vector3(0, -1, 0) * Time.deltaTime * moveSpeed * 15);
+            }
+            else if (Input.GetKey(GameManager.Instance.rightC))
+            {
+                car.Rotate(new Vector3(0, 1, 0) * Time.deltaTime * moveSpeed * 15);
+            }
 
-        } else if (moveSpeed < 0.0f) {
-            moveSpeed += Time.deltaTime * 2;
+            this.gameObject.GetComponent<Rigidbody>().velocity = transform.forward * moveSpeed / 2;
+
+            //TEST
+            /*if(GameManager.Instance.timer > 10.0f && !doneReset) {
+                DeactivateCar();
+                doneReset = true;
+            }*/
         }
-
-        if(Input.GetKey(GameManager.Instance.leftC)) {
-            car.Rotate(new Vector3(0, -1, 0) * Time.deltaTime * moveSpeed * 15);
-        } else if(Input.GetKey(GameManager.Instance.rightC)) {
-            car.Rotate(new Vector3(0, 1, 0) * Time.deltaTime * moveSpeed * 15);
-        }
-
-        this.gameObject.GetComponent<Rigidbody>().velocity = transform.forward * moveSpeed / 2;
-
-        //TEST
-        /*if(GameManager.Instance.timer > 10.0f && !doneReset) {
-            DeactivateCar();
-            doneReset = true;
-        }*/
     }
 
     void ActivateCar() {
@@ -110,5 +149,20 @@ public class PlayerController : MonoBehaviour {
             this.transform.GetChild(0).GetChild(i).gameObject.SetActive(false);
         }
         GameManager.Instance.carSelected = "";
+    }
+
+    IEnumerator WaitForExplosion() {
+        yield return new WaitForSeconds(2);
+        DeactivateCar();
+        car.position = startingPos;
+        GameManager.Instance.gameRestarted = true;
+    }
+
+    void OnCollisionEnter(Collision other) {
+        if (other.gameObject.tag == "Buildings" && (moveSpeed >= maxSpeed / 2 || moveSpeed <= -maxSpeed / 2 )) {
+            GameManager.Instance.dead = true;
+            Instantiate(carExplotion, car.transform.position, car.transform.rotation);
+            StartCoroutine(WaitForExplosion());
+        }
     }
 }

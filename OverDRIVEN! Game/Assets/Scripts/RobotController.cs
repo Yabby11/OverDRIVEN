@@ -22,6 +22,10 @@ public class RobotController : MonoBehaviour {
 	void Start () {
         //Set the robot transform to the variable.
         robot = this.transform;
+
+        //Setting GameRestarted to false.
+
+        GameManager.Instance.gameRestarted = false;
     }
 
     void Update() {
@@ -45,7 +49,7 @@ public class RobotController : MonoBehaviour {
     }
 
     void CastRay() {
-        if(Physics.Raycast(robot.position, -transform.right, out hit, 1.5f) && laser.enabled) {
+        if(Physics.Raycast(robot.position, -transform.right, out hit, 1.3f) && laser.enabled) {
             //If the Raycast hits a car,
             if(hit.transform.tag == "Car") {
                 //Start counting down to 0 form 5.
