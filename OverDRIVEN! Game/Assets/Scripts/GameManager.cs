@@ -4,19 +4,6 @@ using System.Collections;
 
 public class GameManager : SingletonBehaviour<GameManager> {
 
-    public Mesh baseAI,
-                armoured,
-                supra,
-                wrx,
-                chevelle,
-                gtr,
-                stingray;
-
-    public GameObject Car;
-
-    //Cars to choose from.
-    public string carSelected;
-
     //Car is selected, game can now begin
     /*@*@*@* Add when you crash, set to false *@*@*@*/
     public bool gameCanBegin;
@@ -25,10 +12,14 @@ public class GameManager : SingletonBehaviour<GameManager> {
     /*@*@*@* Add when you crash, set to true *@*@*@*/
     public bool gameRestarted;
 
-    public bool carActivated;
-
     //The hacker timer.
     public float timer;
+
+    //Cars to choose from.
+    public string carSelected;
+
+    //make dead
+    public bool dead;
 
     //The 4 directions you can move in.
     public string forwardC,
@@ -40,12 +31,9 @@ public class GameManager : SingletonBehaviour<GameManager> {
     public string[] arrayOfKeys = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
 
 
-    void Start () {        
+    void Start () {
         //Initial set controls to WASD.
-        forwardC = "w";
-        backwardC = "s";
-        leftC = "a";
-        rightC = "d";
+        ResetControls();
 
         Object.DontDestroyOnLoad(this.gameObject);
     }
@@ -54,65 +42,19 @@ public class GameManager : SingletonBehaviour<GameManager> {
         if(gameCanBegin && SceneManager.GetActiveScene().name == "OverDRIVEN Game Scene") {
             timer += Time.deltaTime;
 
-            if(!carActivated) {
-                ActivateCar();
-            }
-
             //If the counter is at a 30 second mark,
             if(timer % 30 <= 0.02f && timer > 1f) {
                 //Change the controls.
                 HackerControls();
             }
 
-            //If the game is over e.g. you crashed, restart the game.
-            if(gameRestarted) {
-                ResetChosenCar();
-                gameRestarted = false;
+            if(gameRestarted)
+            {
+                RestartGame();
             }
         }
     }
-
-    void ActivateCar() {
-        Car = Instantiate(Car);
-
-        switch(carSelected) {
-            case "Base AI":
-                Car.GetComponent<MeshFilter>().mesh = baseAI;
-                break;
-            case "Armoured":
-                Car.GetComponent<MeshFilter>().mesh = armoured;
-                break;
-            case "Supra":
-                Car.GetComponent<MeshFilter>().mesh = supra;
-                break;
-            case "WRX":
-                Car.GetComponent<MeshFilter>().mesh = wrx;
-                break;
-            case "Chevelle":
-                Car.GetComponent<MeshFilter>().mesh = chevelle;
-                break;
-            case "GTR":
-                Car.GetComponent<MeshFilter>().mesh = gtr;
-                break;
-            case "Stingray":
-                Car.GetComponent<MeshFilter>().mesh = stingray;
-                break;
-        }
-
-        carActivated = true;
-    }
-
-    void DeactivateCar() {
-        GameObject.Find(carSelected).SetActive(false);
-    }
-
-    //If the game has asked to be restarted,
-    void ResetChosenCar() {
-        //Delete the current car from being chosen, so you can re-choose.
-        carSelected = "";
-        carActivated = false;
-    }
-
+    
     //When reassigning controls,
     int GetRandResult() {
         //Grab a random letter from the array,
@@ -135,5 +77,20 @@ public class GameManager : SingletonBehaviour<GameManager> {
             rightC = arrayOfKeys[GetRandResult()];
             Debug.Log("Forward: " + forwardC + ", Backward: " + backwardC + ", Left: " + leftC + ", Right: " + rightC);
         }
+    }
+
+    void ResetControls() {
+        forwardC = "w";
+        backwardC = "s";
+        leftC = "a";
+        rightC = "d";
+    }
+
+    void RestartGame() {
+        ResetControls();
+        carSelected = "";
+        dead = false;
+        SceneManager.LoadScene(1);
+
     }
 }
